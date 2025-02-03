@@ -1,8 +1,23 @@
-self.addEventListener("install", event => {
-    console.log("Service Worker installato");
-    self.skipWaiting();
+self.addEventListener("install", (event) => {
+    event.waitUntil(
+        caches.open("eurjpy-widget-cache").then((cache) => {
+            return cache.addAll([
+                "/",
+                "/index.html",
+                "/manifest.json",
+                "/styles.css",
+                "/main.js",
+                "/icon-192.png",
+                "/icon-512.png"
+            ]);
+        })
+    );
 });
 
-self.addEventListener("fetch", event => {
-    console.log("Richiesta intercettata:", event.request.url);
+self.addEventListener("fetch", (event) => {
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
+    );
 });
