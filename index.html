@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>Widget EUR/JPY</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="widget">
+        <h2>EUR/JPY</h2>
+        <p id="rate">Caricamento...</p>
+    </div>
+
+    <script>
+        async function fetchExchangeRate() {
+            try {
+                let response = await fetch('https://api.exchangerate-api.com/v4/latest/EUR');
+                let data = await response.json();
+                document.getElementById('rate').textContent = "¥ " + data.rates.JPY;
+            } catch (error) {
+                document.getElementById('rate').textContent = "Errore nel caricamento";
+            }
+        }
+
+        fetchExchangeRate();
+        setInterval(fetchExchangeRate, 60000); // Aggiorna ogni minuto
+    </script>
+</body>
+</html>
